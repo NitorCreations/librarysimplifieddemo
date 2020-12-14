@@ -1,0 +1,1089 @@
+Resources:
+  LibrarySimplifiedDemoVPC886FBE18:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/Resource
+  LibrarySimplifiedDemoVPCPublicSubnet1Subnet16AB16E4:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/18
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+      AvailabilityZone: eu-west-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet1/Subnet
+  LibrarySimplifiedDemoVPCPublicSubnet1RouteTableA3457A60:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+      Tags:
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet1/RouteTable
+  LibrarySimplifiedDemoVPCPublicSubnet1RouteTableAssociation53C31E8A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: LibrarySimplifiedDemoVPCPublicSubnet1RouteTableA3457A60
+      SubnetId:
+        Ref: LibrarySimplifiedDemoVPCPublicSubnet1Subnet16AB16E4
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet1/RouteTableAssociation
+  LibrarySimplifiedDemoVPCPublicSubnet1DefaultRoute2A344701:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: LibrarySimplifiedDemoVPCPublicSubnet1RouteTableA3457A60
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: LibrarySimplifiedDemoVPCIGWCD079D4C
+    DependsOn:
+      - LibrarySimplifiedDemoVPCVPCGW00A5416A
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet1/DefaultRoute
+  LibrarySimplifiedDemoVPCPublicSubnet1EIP8D494BCF:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet1/EIP
+  LibrarySimplifiedDemoVPCPublicSubnet1NATGateway2632BE77:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - LibrarySimplifiedDemoVPCPublicSubnet1EIP8D494BCF
+          - AllocationId
+      SubnetId:
+        Ref: LibrarySimplifiedDemoVPCPublicSubnet1Subnet16AB16E4
+      Tags:
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet1/NATGateway
+  LibrarySimplifiedDemoVPCPublicSubnet2Subnet22E6CFA3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.64.0/18
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+      AvailabilityZone: eu-west-1b
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet2/Subnet
+  LibrarySimplifiedDemoVPCPublicSubnet2RouteTable71CB2A15:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+      Tags:
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet2/RouteTable
+  LibrarySimplifiedDemoVPCPublicSubnet2RouteTableAssociation322FAB90:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: LibrarySimplifiedDemoVPCPublicSubnet2RouteTable71CB2A15
+      SubnetId:
+        Ref: LibrarySimplifiedDemoVPCPublicSubnet2Subnet22E6CFA3
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet2/RouteTableAssociation
+  LibrarySimplifiedDemoVPCPublicSubnet2DefaultRouteB73A1209:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: LibrarySimplifiedDemoVPCPublicSubnet2RouteTable71CB2A15
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: LibrarySimplifiedDemoVPCIGWCD079D4C
+    DependsOn:
+      - LibrarySimplifiedDemoVPCVPCGW00A5416A
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet2/DefaultRoute
+  LibrarySimplifiedDemoVPCPublicSubnet2EIPF0000697:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet2/EIP
+  LibrarySimplifiedDemoVPCPublicSubnet2NATGatewayB46F941F:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - LibrarySimplifiedDemoVPCPublicSubnet2EIPF0000697
+          - AllocationId
+      SubnetId:
+        Ref: LibrarySimplifiedDemoVPCPublicSubnet2Subnet22E6CFA3
+      Tags:
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PublicSubnet2/NATGateway
+  LibrarySimplifiedDemoVPCPrivateSubnet1SubnetEC716353:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.128.0/18
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+      AvailabilityZone: eu-west-1a
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet1
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet1/Subnet
+  LibrarySimplifiedDemoVPCPrivateSubnet1RouteTableCFF87C4E:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+      Tags:
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet1
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet1/RouteTable
+  LibrarySimplifiedDemoVPCPrivateSubnet1RouteTableAssociation93670C4B:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: LibrarySimplifiedDemoVPCPrivateSubnet1RouteTableCFF87C4E
+      SubnetId:
+        Ref: LibrarySimplifiedDemoVPCPrivateSubnet1SubnetEC716353
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet1/RouteTableAssociation
+  LibrarySimplifiedDemoVPCPrivateSubnet1DefaultRouteE49E6CFB:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: LibrarySimplifiedDemoVPCPrivateSubnet1RouteTableCFF87C4E
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: LibrarySimplifiedDemoVPCPublicSubnet1NATGateway2632BE77
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet1/DefaultRoute
+  LibrarySimplifiedDemoVPCPrivateSubnet2Subnet22EF5375:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.192.0/18
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+      AvailabilityZone: eu-west-1b
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet2
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet2/Subnet
+  LibrarySimplifiedDemoVPCPrivateSubnet2RouteTable79AC8A68:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+      Tags:
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet2
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet2/RouteTable
+  LibrarySimplifiedDemoVPCPrivateSubnet2RouteTableAssociationD59FABE1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: LibrarySimplifiedDemoVPCPrivateSubnet2RouteTable79AC8A68
+      SubnetId:
+        Ref: LibrarySimplifiedDemoVPCPrivateSubnet2Subnet22EF5375
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet2/RouteTableAssociation
+  LibrarySimplifiedDemoVPCPrivateSubnet2DefaultRouteB42EE2A9:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: LibrarySimplifiedDemoVPCPrivateSubnet2RouteTable79AC8A68
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: LibrarySimplifiedDemoVPCPublicSubnet2NATGatewayB46F941F
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/PrivateSubnet2/DefaultRoute
+  LibrarySimplifiedDemoVPCIGWCD079D4C:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/IGW
+  LibrarySimplifiedDemoVPCVPCGW00A5416A:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+      InternetGatewayId:
+        Ref: LibrarySimplifiedDemoVPCIGWCD079D4C
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoVPC/VPCGW
+  librarysimplifieddemo:
+    Type: AWS::Elasticsearch::Domain
+    Properties:
+      AccessPolicies:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - "293246570391"
+            Action:
+              - es:*
+            Resource: arn:aws:es:eu-west-1:293246570391:domain/librarysimplified-demo/*
+      DomainName: librarysimplified-demo
+      EBSOptions:
+        EBSEnabled: true
+        VolumeSize: 10
+        VolumeType: gp2
+      ElasticsearchClusterConfig:
+        InstanceCount: 1
+        InstanceType: t2.small.elasticsearch
+      ElasticsearchVersion: "6.4"
+      EncryptionAtRestOptions: {}
+      NodeToNodeEncryptionOptions:
+        Enabled: false
+      SnapshotOptions:
+        AutomatedSnapshotStartHour: 0
+      VPCOptions:
+        SubnetIds:
+          - Ref: LibrarySimplifiedDemoVPCPrivateSubnet1SubnetEC716353
+          - Ref: LibrarySimplifiedDemoVPCPrivateSubnet2Subnet22EF5375
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/librarysimplified-demo
+  LibrarySimplifiedDemoCluster491E1C0F:
+    Type: AWS::ECS::Cluster
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoCluster/Resource
+  LibrarySimplifiedDemoLBD4295A5E:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      LoadBalancerAttributes:
+        - Key: deletion_protection.enabled
+          Value: "false"
+      Scheme: internet-facing
+      SecurityGroups:
+        - Fn::GetAtt:
+            - LibrarySimplifiedDemoLBSecurityGroup318F99D1
+            - GroupId
+      Subnets:
+        - Ref: LibrarySimplifiedDemoVPCPublicSubnet1Subnet16AB16E4
+        - Ref: LibrarySimplifiedDemoVPCPublicSubnet2Subnet22E6CFA3
+      Type: application
+    DependsOn:
+      - LibrarySimplifiedDemoVPCPublicSubnet1DefaultRoute2A344701
+      - LibrarySimplifiedDemoVPCPublicSubnet2DefaultRouteB73A1209
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoLB/Resource
+  LibrarySimplifiedDemoLBSecurityGroup318F99D1:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Automatically created Security Group for ELB LibrarySimplifiedDemoLibrarySimplifiedDemoLBA7AF3423
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow from anyone on port 443
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoLB/SecurityGroup/Resource
+  LibrarySimplifiedDemoLBSecurityGrouptoLibrarySimplifiedDemoCirculationWebappServiceSecurityGroup8600649680769D193C:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId:
+        Fn::GetAtt:
+          - LibrarySimplifiedDemoLBSecurityGroup318F99D1
+          - GroupId
+      IpProtocol: tcp
+      Description: Load balancer to target
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - CirculationWebappServiceSecurityGroupCD514D7D
+          - GroupId
+      FromPort: 80
+      ToPort: 80
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoLB/SecurityGroup/to LibrarySimplifiedDemoCirculationWebappServiceSecurityGroup86006496:80
+  LibrarySimplifiedDemoLBPublicListener2F31C055:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - TargetGroupArn:
+            Ref: LibrarySimplifiedDemoLBPublicListenerECSGroup4A89AF1F
+          Type: forward
+      LoadBalancerArn:
+        Ref: LibrarySimplifiedDemoLBD4295A5E
+      Port: 443
+      Protocol: HTTP
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoLB/PublicListener/Resource
+  LibrarySimplifiedDemoLBPublicListenerECSGroup4A89AF1F:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 443
+      Protocol: HTTPS
+      TargetType: ip
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoLB/PublicListener/ECSGroup/Resource
+  LibrarySimplifiedDemoDBCredentialsA20F0B0E:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      GenerateSecretString:
+        GenerateStringKey: password
+        SecretStringTemplate: '{"username":"dbuser"}'
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoDBCredentials/Resource
+  LibrarySimplifiedDemoDBCredentialsAttachment98AA79CA:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId:
+        Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+      TargetId:
+        Ref: LibrarySimplifiedDemoDBF2E6E049
+      TargetType: AWS::RDS::DBInstance
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoDBCredentials/Attachment/Resource
+  LibrarySimplifiedDemoDBSubnetGroupDB25A15B:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet group for LibrarySimplifiedDemoDB database
+      SubnetIds:
+        - Ref: LibrarySimplifiedDemoVPCPrivateSubnet1SubnetEC716353
+        - Ref: LibrarySimplifiedDemoVPCPrivateSubnet2Subnet22EF5375
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoDB/SubnetGroup/Default
+  LibrarySimplifiedDemoDBSecurityGroup703A2234:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for LibrarySimplifiedDemoDB database
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoDB/SecurityGroup/Resource
+  LibrarySimplifiedDemoDBF2E6E049:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: db.m5.large
+      AllocatedStorage: "100"
+      CopyTagsToSnapshot: true
+      DBName: simplified
+      DBSubnetGroupName:
+        Ref: LibrarySimplifiedDemoDBSubnetGroupDB25A15B
+      DeletionProtection: false
+      Engine: postgres
+      EngineVersion: "9.5"
+      MasterUsername:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+            - :SecretString:username::}}
+      MasterUserPassword:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+            - :SecretString:password::}}
+      Port: "5432"
+      StorageType: gp2
+      VPCSecurityGroups:
+        - Fn::GetAtt:
+            - LibrarySimplifiedDemoDBSecurityGroup703A2234
+            - GroupId
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LibrarySimplifiedDemoDB/Resource
+  SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebcServiceRoleD5878EC9:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebc/ServiceRole/Resource
+  SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebcServiceRoleDefaultPolicyC34574E1:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+          - Action:
+              - rds-data:ExecuteStatement
+              - rds-data:BatchExecuteStatement
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":rds:eu-west-1:293246570391:db:"
+                  - Ref: LibrarySimplifiedDemoDBF2E6E049
+          - Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebcServiceRoleDefaultPolicyC34574E1
+      Roles:
+        - Ref: SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebcServiceRoleD5878EC9
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebc/ServiceRole/DefaultPolicy/Resource
+  SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebcA32D7E27:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParameters0fb8ade56bd16fbca8457aaf71a8c4322dee80e5aa856be83ab23cef588547fbS3Bucket29B47269
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters0fb8ade56bd16fbca8457aaf71a8c4322dee80e5aa856be83ab23cef588547fbS3VersionKey41F252FF
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters0fb8ade56bd16fbca8457aaf71a8c4322dee80e5aa856be83ab23cef588547fbS3VersionKey41F252FF
+      Handler: index.handler
+      Role:
+        Fn::GetAtt:
+          - SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebcServiceRoleD5878EC9
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          DB_INSTANCE_ENDPOINT_ADDRESS:
+            Fn::GetAtt:
+              - LibrarySimplifiedDemoDBF2E6E049
+              - Endpoint.Address
+          DB_INSTANCE_ENDPOINT_PORT:
+            Fn::GetAtt:
+              - LibrarySimplifiedDemoDBF2E6E049
+              - Endpoint.Port
+          DB_SECRET_ARN:
+            Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+      Timeout: 60
+    DependsOn:
+      - SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebcServiceRoleDefaultPolicyC34574E1
+      - SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebcServiceRoleD5878EC9
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebc/Resource
+      aws:asset:path: /Users/mikkovihonen/Workspace/librarysimplified-demo/lambda-dbinit
+      aws:asset:property: Code
+  DBInitProviderframeworkonEventServiceRole103ACCDB:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    DependsOn:
+      - LibrarySimplifiedDemoDBF2E6E049
+      - LibrarySimplifiedDemoDBSecurityGroup703A2234
+      - LibrarySimplifiedDemoDBSubnetGroupDB25A15B
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/DBInitProvider/framework-onEvent/ServiceRole/Resource
+  DBInitProviderframeworkonEventServiceRoleDefaultPolicyD7E45B4E:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebcA32D7E27
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: DBInitProviderframeworkonEventServiceRoleDefaultPolicyD7E45B4E
+      Roles:
+        - Ref: DBInitProviderframeworkonEventServiceRole103ACCDB
+    DependsOn:
+      - LibrarySimplifiedDemoDBF2E6E049
+      - LibrarySimplifiedDemoDBSecurityGroup703A2234
+      - LibrarySimplifiedDemoDBSubnetGroupDB25A15B
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/DBInitProvider/framework-onEvent/ServiceRole/DefaultPolicy/Resource
+  DBInitProviderframeworkonEventA071B8CF:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cS3BucketEAC9DD43
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cS3VersionKeyDD9AE9E7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cS3VersionKeyDD9AE9E7
+      Handler: framework.onEvent
+      Role:
+        Fn::GetAtt:
+          - DBInitProviderframeworkonEventServiceRole103ACCDB
+          - Arn
+      Runtime: nodejs10.x
+      Description: AWS CDK resource provider framework - onEvent (LibrarySimplifiedDemo/DBInitProvider)
+      Environment:
+        Variables:
+          USER_ON_EVENT_FUNCTION_ARN:
+            Fn::GetAtt:
+              - SingletonLambdaf7ccf730454511e89c2dfa7ae01aaebcA32D7E27
+              - Arn
+      Timeout: 900
+    DependsOn:
+      - DBInitProviderframeworkonEventServiceRoleDefaultPolicyD7E45B4E
+      - DBInitProviderframeworkonEventServiceRole103ACCDB
+      - LibrarySimplifiedDemoDBF2E6E049
+      - LibrarySimplifiedDemoDBSecurityGroup703A2234
+      - LibrarySimplifiedDemoDBSubnetGroupDB25A15B
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/DBInitProvider/framework-onEvent/Resource
+      aws:asset:path: /Users/mikkovihonen/Workspace/librarysimplified-demo/node_modules/@aws-cdk/custom-resources/lib/provider-framework/runtime
+      aws:asset:property: Code
+  DBInitProviderframeworkonEventLogRetentionD4019C26:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: DBInitProviderframeworkonEventA071B8CF
+      RetentionInDays: 1
+    DependsOn:
+      - LibrarySimplifiedDemoDBF2E6E049
+      - LibrarySimplifiedDemoDBSecurityGroup703A2234
+      - LibrarySimplifiedDemoDBSubnetGroupDB25A15B
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/DBInitProvider/framework-onEvent/LogRetention/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:PutRetentionPolicy
+              - logs:DeleteRetentionPolicy
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      Roles:
+        - Ref: LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs10.x
+      Code:
+        S3Bucket:
+          Ref: AssetParameters67b7823b74bc135986aa72f889d6a8da058d0c4a20cbc2dfc6f78995fdd2fc24S3Bucket4D46ABB5
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters67b7823b74bc135986aa72f889d6a8da058d0c4a20cbc2dfc6f78995fdd2fc24S3VersionKeyB0F28861
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters67b7823b74bc135986aa72f889d6a8da058d0c4a20cbc2dfc6f78995fdd2fc24S3VersionKeyB0F28861
+      Role:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+          - Arn
+    DependsOn:
+      - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource
+  CirculationWebappServiceDNS7C10E33C:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: lsdemocirculation.nitorio.us.
+      Type: A
+      AliasTarget:
+        DNSName:
+          Fn::Join:
+            - ""
+            - - dualstack.
+              - Fn::GetAtt:
+                  - LibrarySimplifiedDemoLBD4295A5E
+                  - DNSName
+        HostedZoneId:
+          Fn::GetAtt:
+            - LibrarySimplifiedDemoLBD4295A5E
+            - CanonicalHostedZoneID
+      HostedZoneId: Z2N6543C2MYFH4
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationWebappService/DNS/Resource
+  CirculationWebappServiceTaskDefTaskRole94428545:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationWebappService/TaskDef/TaskRole/Resource
+  CirculationWebappServiceTaskDefEA1790D7:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Environment:
+            - Name: TZ
+              Value: Europe/Helsinki
+            - Name: SIMPLIFIED_PRODUCTION_DATABASE
+              Value:
+                Fn::Join:
+                  - ""
+                  - - postgres://${DB_USER}:${DB_PASSWORD}@
+                    - Fn::GetAtt:
+                        - LibrarySimplifiedDemoDBF2E6E049
+                        - Endpoint.Address
+                    - ":"
+                    - Fn::GetAtt:
+                        - LibrarySimplifiedDemoDBF2E6E049
+                        - Endpoint.Port
+                    - /simplified_circ_db
+          Essential: true
+          Image: nypl/circ-webapp:2.1
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: CirculationWebappServiceTaskDefwebLogGroup1ED67FB7
+              awslogs-stream-prefix: CirculationWebappService
+              awslogs-region: eu-west-1
+          Name: web
+          PortMappings:
+            - ContainerPort: 80
+              Protocol: tcp
+          Secrets:
+            - Name: DB_USER
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+                    - ":username::"
+            - Name: DB_PASSWORD
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+                    - ":password::"
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - CirculationWebappServiceTaskDefExecutionRole50AB4A34
+          - Arn
+      Family: LibrarySimplifiedDemoCirculationWebappServiceTaskDef1E13A384
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      TaskRoleArn:
+        Fn::GetAtt:
+          - CirculationWebappServiceTaskDefTaskRole94428545
+          - Arn
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationWebappService/TaskDef/Resource
+  CirculationWebappServiceTaskDefwebLogGroup1ED67FB7:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationWebappService/TaskDef/web/LogGroup/Resource
+  CirculationWebappServiceTaskDefExecutionRole50AB4A34:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationWebappService/TaskDef/ExecutionRole/Resource
+  CirculationWebappServiceTaskDefExecutionRoleDefaultPolicy039168C7:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - CirculationWebappServiceTaskDefwebLogGroup1ED67FB7
+                - Arn
+          - Action:
+              - secretsmanager:GetSecretValue
+              - secretsmanager:DescribeSecret
+            Effect: Allow
+            Resource:
+              Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+        Version: "2012-10-17"
+      PolicyName: CirculationWebappServiceTaskDefExecutionRoleDefaultPolicy039168C7
+      Roles:
+        - Ref: CirculationWebappServiceTaskDefExecutionRole50AB4A34
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationWebappService/TaskDef/ExecutionRole/DefaultPolicy/Resource
+  CirculationWebappService29FCDA5C:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Ref: LibrarySimplifiedDemoCluster491E1C0F
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      EnableECSManagedTags: false
+      HealthCheckGracePeriodSeconds: 60
+      LaunchType: FARGATE
+      LoadBalancers:
+        - ContainerName: web
+          ContainerPort: 80
+          TargetGroupArn:
+            Ref: LibrarySimplifiedDemoLBPublicListenerECSGroup4A89AF1F
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - CirculationWebappServiceSecurityGroupCD514D7D
+                - GroupId
+          Subnets:
+            - Ref: LibrarySimplifiedDemoVPCPrivateSubnet1SubnetEC716353
+            - Ref: LibrarySimplifiedDemoVPCPrivateSubnet2Subnet22EF5375
+      TaskDefinition:
+        Ref: CirculationWebappServiceTaskDefEA1790D7
+    DependsOn:
+      - LibrarySimplifiedDemoLBPublicListenerECSGroup4A89AF1F
+      - LibrarySimplifiedDemoLBPublicListener2F31C055
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationWebappService/Service/Service
+  CirculationWebappServiceSecurityGroupCD514D7D:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: LibrarySimplifiedDemo/CirculationWebappService/Service/SecurityGroup
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationWebappService/Service/SecurityGroup/Resource
+  CirculationWebappServiceSecurityGroupfromLibrarySimplifiedDemoLibrarySimplifiedDemoLBSecurityGroupBC0A570B80FFB14367:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: Load balancer to target
+      FromPort: 80
+      GroupId:
+        Fn::GetAtt:
+          - CirculationWebappServiceSecurityGroupCD514D7D
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - LibrarySimplifiedDemoLBSecurityGroup318F99D1
+          - GroupId
+      ToPort: 80
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationWebappService/Service/SecurityGroup/from LibrarySimplifiedDemoLibrarySimplifiedDemoLBSecurityGroupBC0A570B:80
+  CirculationScriptsTaskDefinitionTaskRole5F0597A7:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationScriptsTaskDefinition/TaskRole/Resource
+  CirculationScriptsTaskDefinitionA90388BA:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Environment:
+            - Name: TZ
+              Value: Europe/Helsinki
+            - Name: SIMPLIFIED_PRODUCTION_DATABASE
+              Value:
+                Fn::Join:
+                  - ""
+                  - - postgres://${DB_USER}:${DB_PASSWORD}@
+                    - Fn::GetAtt:
+                        - LibrarySimplifiedDemoDBF2E6E049
+                        - Endpoint.Address
+                    - ":"
+                    - Fn::GetAtt:
+                        - LibrarySimplifiedDemoDBF2E6E049
+                        - Endpoint.Port
+                    - /simplified_circ_db
+          Essential: true
+          Image: nypl/circ-scripts:2.1
+          Name: Service2Container
+          Secrets:
+            - Name: DB_USER
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+                    - ":username::"
+            - Name: DB_PASSWORD
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+                    - ":password::"
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - CirculationScriptsTaskDefinitionExecutionRoleC317A124
+          - Arn
+      Family: LibrarySimplifiedDemoCirculationScriptsTaskDefinition61972494
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      TaskRoleArn:
+        Fn::GetAtt:
+          - CirculationScriptsTaskDefinitionTaskRole5F0597A7
+          - Arn
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationScriptsTaskDefinition/Resource
+  CirculationScriptsTaskDefinitionExecutionRoleC317A124:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationScriptsTaskDefinition/ExecutionRole/Resource
+  CirculationScriptsTaskDefinitionExecutionRoleDefaultPolicyC2ED1D58:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - secretsmanager:GetSecretValue
+              - secretsmanager:DescribeSecret
+            Effect: Allow
+            Resource:
+              Ref: LibrarySimplifiedDemoDBCredentialsA20F0B0E
+        Version: "2012-10-17"
+      PolicyName: CirculationScriptsTaskDefinitionExecutionRoleDefaultPolicyC2ED1D58
+      Roles:
+        - Ref: CirculationScriptsTaskDefinitionExecutionRoleC317A124
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationScriptsTaskDefinition/ExecutionRole/DefaultPolicy/Resource
+  CirculationScriptsService10CF4454:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Ref: LibrarySimplifiedDemoCluster491E1C0F
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      EnableECSManagedTags: false
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - CirculationScriptsServiceSecurityGroupAF1F8DDE
+                - GroupId
+          Subnets:
+            - Ref: LibrarySimplifiedDemoVPCPrivateSubnet1SubnetEC716353
+            - Ref: LibrarySimplifiedDemoVPCPrivateSubnet2Subnet22EF5375
+      TaskDefinition:
+        Ref: CirculationScriptsTaskDefinitionA90388BA
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationScriptsService/Service
+  CirculationScriptsServiceSecurityGroupAF1F8DDE:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: LibrarySimplifiedDemo/CirculationScriptsService/SecurityGroup
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      VpcId:
+        Ref: LibrarySimplifiedDemoVPC886FBE18
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CirculationScriptsService/SecurityGroup/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.77.0,@aws-cdk/assets=1.77.0,@aws-cdk/aws-applicationautoscaling=1.77.0,@aws-cdk/aws-autoscaling=1.77.0,@aws-cdk/aws-autoscaling-common=1.77.0,@aws-cdk/aws-autoscaling-hooktargets=1.77.0,@aws-cdk/aws-certificatemanager=1.77.0,@aws-cdk/aws-cloudwatch=1.77.0,@aws-cdk/aws-codeguruprofiler=1.77.0,@aws-cdk/aws-ec2=1.77.0,@aws-cdk/aws-ecr=1.77.0,@aws-cdk/aws-ecr-assets=1.77.0,@aws-cdk/aws-ecs=1.77.0,@aws-cdk/aws-ecs-patterns=1.77.0,@aws-cdk/aws-elasticloadbalancingv2=1.77.0,@aws-cdk/aws-elasticsearch=1.77.0,@aws-cdk/aws-events=1.77.0,@aws-cdk/aws-events-targets=1.77.0,@aws-cdk/aws-iam=1.77.0,@aws-cdk/aws-kms=1.77.0,@aws-cdk/aws-lambda=1.77.0,@aws-cdk/aws-logs=1.77.0,@aws-cdk/aws-rds=1.77.0,@aws-cdk/aws-route53=1.77.0,@aws-cdk/aws-route53-targets=1.77.0,@aws-cdk/aws-s3=1.77.0,@aws-cdk/aws-s3-assets=1.77.0,@aws-cdk/aws-sam=1.77.0,@aws-cdk/aws-secretsmanager=1.77.0,@aws-cdk/aws-servicediscovery=1.77.0,@aws-cdk/aws-sns=1.77.0,@aws-cdk/aws-sns-subscriptions=1.77.0,@aws-cdk/aws-sqs=1.77.0,@aws-cdk/aws-ssm=1.77.0,@aws-cdk/cloud-assembly-schema=1.77.0,@aws-cdk/core=1.77.0,@aws-cdk/custom-resources=1.77.0,@aws-cdk/cx-api=1.77.0,@aws-cdk/region-info=1.77.0,jsii-runtime=node.js/v10.13.0
+    Metadata:
+      aws:cdk:path: LibrarySimplifiedDemo/CDKMetadata/Default
+Parameters:
+  AssetParameters0fb8ade56bd16fbca8457aaf71a8c4322dee80e5aa856be83ab23cef588547fbS3Bucket29B47269:
+    Type: String
+    Description: S3 bucket for asset "0fb8ade56bd16fbca8457aaf71a8c4322dee80e5aa856be83ab23cef588547fb"
+  AssetParameters0fb8ade56bd16fbca8457aaf71a8c4322dee80e5aa856be83ab23cef588547fbS3VersionKey41F252FF:
+    Type: String
+    Description: S3 key for asset version "0fb8ade56bd16fbca8457aaf71a8c4322dee80e5aa856be83ab23cef588547fb"
+  AssetParameters0fb8ade56bd16fbca8457aaf71a8c4322dee80e5aa856be83ab23cef588547fbArtifactHashAEB4B89D:
+    Type: String
+    Description: Artifact hash for asset "0fb8ade56bd16fbca8457aaf71a8c4322dee80e5aa856be83ab23cef588547fb"
+  AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cS3BucketEAC9DD43:
+    Type: String
+    Description: S3 bucket for asset "c691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49c"
+  AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cS3VersionKeyDD9AE9E7:
+    Type: String
+    Description: S3 key for asset version "c691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49c"
+  AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cArtifactHash627DAAA7:
+    Type: String
+    Description: Artifact hash for asset "c691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49c"
+  AssetParameters67b7823b74bc135986aa72f889d6a8da058d0c4a20cbc2dfc6f78995fdd2fc24S3Bucket4D46ABB5:
+    Type: String
+    Description: S3 bucket for asset "67b7823b74bc135986aa72f889d6a8da058d0c4a20cbc2dfc6f78995fdd2fc24"
+  AssetParameters67b7823b74bc135986aa72f889d6a8da058d0c4a20cbc2dfc6f78995fdd2fc24S3VersionKeyB0F28861:
+    Type: String
+    Description: S3 key for asset version "67b7823b74bc135986aa72f889d6a8da058d0c4a20cbc2dfc6f78995fdd2fc24"
+  AssetParameters67b7823b74bc135986aa72f889d6a8da058d0c4a20cbc2dfc6f78995fdd2fc24ArtifactHashBA91B77F:
+    Type: String
+    Description: Artifact hash for asset "67b7823b74bc135986aa72f889d6a8da058d0c4a20cbc2dfc6f78995fdd2fc24"
+Outputs:
+  CirculationWebappServiceLoadBalancerDNSC20CB390:
+    Value:
+      Fn::GetAtt:
+        - LibrarySimplifiedDemoLBD4295A5E
+        - DNSName
+  CirculationWebappServiceServiceURLEE6B6806:
+    Value:
+      Fn::Join:
+        - ""
+        - - http://
+          - Ref: CirculationWebappServiceDNS7C10E33C
+

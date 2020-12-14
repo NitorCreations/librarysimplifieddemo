@@ -1,0 +1,38 @@
+{
+  "name": "library-simplified-demo",
+  "version": "1.0.0",
+  "description": "Runs a demo of Library Simplified application",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "synth": "cdk synth --no-staging -c stage=dev -c sourceIp=`curl -s https://checkip.amazonaws.com` > template.yaml",
+    "deploy": "'cdk deploy -c stage=dev -c sourceIp=`curl -s https://checkip.amazonaws.com`",
+    "destroy": "'cdk destroy -c stage=dev"
+  },
+  "author": {
+    "name": "Mikko Vihonen, Nitor Creations Oy",
+    "url": "https://www.nitor.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^8.10.38",
+    "aws-cdk": "^1.14.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.6.5"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-cloudformation": "*",
+    "@aws-cdk/aws-lambda": "*",
+    "@aws-cdk/aws-elasticsearch": "^1.14.0",
+    "@aws-cdk/aws-ec2": "*",
+    "@aws-cdk/aws-ecs": "*",
+    "@aws-cdk/aws-rds": "*",
+    "@aws-cdk/aws-elasticloadbalancingv2": "*",
+    "@aws-cdk/aws-ecs-patterns": "*",
+    "@aws-cdk/aws-route53": "*",
+    "@aws-cdk/core": "*"
+  }
+}

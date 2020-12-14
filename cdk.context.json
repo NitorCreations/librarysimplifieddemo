@@ -1,0 +1,11 @@
+{
+  "availability-zones:account=293246570391:region=eu-west-1": [
+    "eu-west-1a",
+    "eu-west-1b",
+    "eu-west-1c"
+  ],
+  "hosted-zone:account=293246570391:domainName=nitorio.us:region=eu-west-1": {
+    "Id": "/hostedzone/Z2N6543C2MYFH4",
+    "Name": "nitorio.us."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "app": "npx ts-node index.ts",
+  "context": {
+    "es": {
+      "version": "6.4"
+    },
+    "dev": {
+      "es": {
+        "domainName": "librarysimplified-demo",
+        "instanceType": "t2.small.elasticsearch",
+        "instanceCount": 2,
+        "volumeSize": 10,
+        "availabilityZoneCount": 2
+      }
+    }
+  }
+}
