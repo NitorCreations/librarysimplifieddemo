@@ -26,7 +26,10 @@ const vpc = new ec2.Vpc(stack, 'LibrarySimplifiedDemoVPC', {
   maxAzs: 2,
 });
 
-const dbSecurityGroup = new ec2.SecurityGroup(stack, "LibrarySimplifiedDemoDBSG", { vpc: vpc, allowAllOutbound: true });
+const dbSecurityGroup = new ec2.SecurityGroup(stack, "LibrarySimplifiedDemoDBSG", {
+  vpc: vpc,
+  allowAllOutbound: true
+});
 
 new es.ESDomain(stack, vpc);
 const cluster = new ecs.Cluster(stack, 'LibrarySimplifiedDemoCluster', {
@@ -69,7 +72,7 @@ dbSecurityGroup.addIngressRule(
   ), 'allow postgre'
 );
 
-const onEvent = new lambda.SingletonFunction(stack, 'DBInitHandler', {
+const dbInitializer = new lambda.SingletonFunction(stack, 'DBInitHandler', {
   uuid: "f7ccf730-4545-11e8-9c2d-fa7ae01aaebc",
   runtime: lambda.Runtime.NODEJS_12_X,
   handler: 'index.handler',
@@ -80,29 +83,38 @@ const onEvent = new lambda.SingletonFunction(stack, 'DBInitHandler', {
     "DB_INSTANCE_ENDPOINT_PORT": db.dbInstanceEndpointPort,
     "DB_SECRET_ARN": dBCredentials.secretArn
   },
-  securityGroups: [ dbSecurityGroup ],
+  securityGroups: [ 
+    ec2.SecurityGroup.fromSecurityGroupId(stack, "DefaultSecurityGroup", vpc.vpcDefaultSecurityGroup)
+  ],
+  vpc: vpc,
   vpcSubnets: {
     subnets: vpc.privateSubnets
-  }
+  },
 });
-onEvent.addToRolePolicy(new iam.PolicyStatement({
+dbInitializer.addToRolePolicy(new iam.PolicyStatement({
   effect: iam.Effect.ALLOW,
   resources: [dBCredentials.secretArn],
   actions: ["secretsmanager:GetSecretValue"]
 }))
-onEvent.addToRolePolicy(new iam.PolicyStatement({
+dbInitializer.addToRolePolicy(new iam.PolicyStatement({
   effect: iam.Effect.ALLOW,
   resources: [db.instanceArn],
   actions: ["rds-data:ExecuteStatement", "rds-data:BatchExecuteStatement"]
 }))
-onEvent.addToRolePolicy(new iam.PolicyStatement({
+dbInitializer.addToRolePolicy(new iam.PolicyStatement({
   effect: iam.Effect.ALLOW,
   resources: ["*"],
   actions: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
 }))
+dbInitializer.addToRolePolicy(new iam.PolicyStatement({
+  effect: iam.Effect.ALLOW,
+  resources: ["*"],
+  actions: ["ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", "ec2:AttachNetworkInterface"]
+}))
+dbInitializer.node.addDependency(vpc);
 
 const dbInitProvider = new cr.Provider(stack, 'DBInitProvider', {
-  onEventHandler: onEvent,
+  onEventHandler: dbInitializer,
   logRetention: logs.RetentionDays.ONE_DAY
 })
 dbInitProvider.node.addDependency(db);
