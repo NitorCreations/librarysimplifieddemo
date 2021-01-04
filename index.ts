@@ -13,6 +13,7 @@ import lambda = require('@aws-cdk/aws-lambda');
 import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
 import certman = require('@aws-cdk/aws-certificatemanager');
+import autoscaling = require('@aws-cdk/aws-applicationautoscaling');
 import * as path from 'path';
 
 const app = new cdk.App();
@@ -199,5 +200,25 @@ const scriptsService = new ecs.FargateService(stack, "CirculationScriptsService"
   ]
 });
 scriptsService.node.addDependency(dbInitProvider)
+
+const refreshMaterlializedViewsTask = new ecs_patterns.ScheduledFargateTask(stack, "CirculationRefreshMaterializedViewTask", {
+  schedule: autoscaling.Schedule.expression("*/5 * * * *"),
+  cluster: cluster,
+  desiredTaskCount: 1,
+  scheduledFargateTaskImageOptions: {
+    image: ecs.ContainerImage.fromAsset('./app-circ-exec'),
+    secrets: {
+      DB_USER: ecs.Secret.fromSecretsManager(dBCredentials, 'username'),
+      DB_PASSWORD: ecs.Secret.fromSecretsManager(dBCredentials, 'password'),
+    },
+    environment: {
+      'TZ': 'Europe/Helsinki',
+      'DB_INSTANCE_ENDPOINT_ADDRESS':  db.dbInstanceEndpointAddress,
+      'DB_INSTANCE_ENDPOINT_PORT':  db.dbInstanceEndpointPort,
+      'SIMPLIFIED_SCRIPT_NAME': 'refresh_materialized_views'
+    }  
+  },
+});
+refreshMaterlializedViewsTask.node.addDependency(dbInitProvider)
 
 app.synth();
