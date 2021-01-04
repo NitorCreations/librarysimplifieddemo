@@ -202,7 +202,7 @@ const scriptsService = new ecs.FargateService(stack, "CirculationScriptsService"
 scriptsService.node.addDependency(dbInitProvider)
 
 const refreshMaterlializedViewsTask = new ecs_patterns.ScheduledFargateTask(stack, "CirculationRefreshMaterializedViewTask", {
-  schedule: autoscaling.Schedule.expression("*/5 * * * *"),
+  schedule: autoscaling.Schedule.expression("rate(10 minutes)"),
   cluster: cluster,
   desiredTaskCount: 1,
   scheduledFargateTaskImageOptions: {
