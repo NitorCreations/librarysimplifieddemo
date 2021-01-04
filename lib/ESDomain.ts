@@ -1,7 +1,7 @@
 import cdk = require('@aws-cdk/core');
 import iam = require('@aws-cdk/aws-iam');
 import { CfnDomain } from '@aws-cdk/aws-elasticsearch';
-import { IVpc } from '@aws-cdk/aws-ec2';
+import { Vpc } from '@aws-cdk/aws-ec2';
 
 interface ESContext {
   readonly version: string;
@@ -18,7 +18,7 @@ interface ESContext {
 
 export class ESDomain {
   public endpoint: string;
-  constructor(scope: cdk.Construct, vpc: IVpc) {
+  constructor(scope: cdk.Construct, vpc: Vpc) {
     const stage: string = scope.node.tryGetContext('stage');
     const esVersion: string = scope.node.tryGetContext('es').version;
     const esContext: ESContext = scope.node.tryGetContext(stage).es;
@@ -31,16 +31,10 @@ export class ESDomain {
       accessPolicies: {
         Version: '2012-10-17',
         Statement: [
-/*          {
-            Effect: 'Allow',
-            Principal: { AWS: ['*'] },
-            Action: ['es:*'],
-            Resource: `arn:aws:es:${cdk.Stack.of(scope).region}:${cdk.Stack.of(scope).account}:domain/${esContext.domainName}/*`,
-            Condition: { IpAddress: { 'aws:SourceIp': `${sourceIp || '127.0.0.1'}` } }
-          },*/
           {
             Effect: 'Allow',
-            Principal: { AWS: [ cdk.Stack.of(scope).account ] },
+//            Principal: { AWS: [ cdk.Stack.of(scope).account ] },
+            Principal: { AWS: "*" },
             Action: [ 'es:*' ],
             Resource: `arn:aws:es:${cdk.Stack.of(scope).region}:${cdk.Stack.of(scope).account}:domain/${esContext.domainName}/*`
           }
@@ -74,6 +68,7 @@ export class ESDomain {
         automatedSnapshotStartHour: 0
       },
       vpcOptions: {
+        securityGroupIds: [vpc.vpcDefaultSecurityGroup],
         subnetIds: vpc.privateSubnets.map(subnet => subnet.subnetId)
       }
     });

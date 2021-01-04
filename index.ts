@@ -118,7 +118,9 @@ const dbInitProvider = new cr.Provider(stack, 'DBInitProvider', {
   logRetention: logs.RetentionDays.ONE_DAY
 })
 dbInitProvider.node.addDependency(db);
+
 const hostedZone = route53.HostedZone.fromLookup(stack, 'NitoriousHZ', { domainName: 'nitorio.us' });
+
 const webappService = new ecs_patterns.ApplicationLoadBalancedFargateService(stack, "CirculationWebappService", {
   cluster,
   certificate: new certman.Certificate(stack, "LibrarySimplifiedDemoCirculationServerCert", {
@@ -133,6 +135,10 @@ const webappService = new ecs_patterns.ApplicationLoadBalancedFargateService(sta
   taskSubnets: {
     subnets: vpc.privateSubnets
   },
+  securityGroups: [
+    ec2.SecurityGroup.fromSecurityGroupId(stack, "LSCVPCDefaultSecurityGroup", vpc.vpcDefaultSecurityGroup),
+    dbSecurityGroup
+  ],
   openListener: true,
   desiredCount: 1,
   protocol: elb.ApplicationProtocol.HTTPS,
@@ -140,6 +146,8 @@ const webappService = new ecs_patterns.ApplicationLoadBalancedFargateService(sta
   domainName: 'lsdemocirculation',
   domainZone: hostedZone,
   platformVersion: ecs.FargatePlatformVersion.VERSION1_4,
+  memoryLimitMiB: 2048,
+  cpu: 1024,
   taskImageOptions: {
     image: ecs.ContainerImage.fromAsset('./app-circ-webapp'),
     containerPort: 80,
@@ -154,11 +162,17 @@ const webappService = new ecs_patterns.ApplicationLoadBalancedFargateService(sta
     }  
   },
 });
+webappService.taskDefinition.taskRole.addToPrincipalPolicy(
+  new iam.PolicyStatement({
+    effect: iam.Effect.ALLOW,
+    resources: ['*'],
+    actions: [ 'es:*' ],
+  })
+);
 webappService.targetGroup.configureHealthCheck({
   path: "/heartbeat"
 })
 webappService.node.addDependency(dbInitProvider);
-
 
 const circulationScriptsTaskDefinition = new ecs.FargateTaskDefinition(stack, "CirculationScriptsTaskDefinition");
 circulationScriptsTaskDefinition.addContainer("Service2Container", {
@@ -178,7 +192,11 @@ const scriptsService = new ecs.FargateService(stack, "CirculationScriptsService"
   cluster: cluster,
   platformVersion: ecs.FargatePlatformVersion.VERSION1_4,
   taskDefinition: circulationScriptsTaskDefinition,
-  desiredCount: 1
+  desiredCount: 1,
+  securityGroups: [
+    ec2.SecurityGroup.fromSecurityGroupId(stack, "CSSVPCDefaultSecurityGroup", vpc.vpcDefaultSecurityGroup),
+    dbSecurityGroup
+  ]
 });
 scriptsService.node.addDependency(dbInitProvider)
 
