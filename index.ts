@@ -13,7 +13,7 @@ import lambda = require('@aws-cdk/aws-lambda');
 import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
 import certman = require('@aws-cdk/aws-certificatemanager');
-import autoscaling = require('@aws-cdk/aws-applicationautoscaling');
+//import autoscaling = require('@aws-cdk/aws-applicationautoscaling');
 import * as path from 'path';
 
 const app = new cdk.App();
