@@ -1,7 +1,7 @@
 FROM nypl/circ-webapp:3.1.0
 WORKDIR /home/simplified/circulation
 RUN apt-get update \
-  && apt-get install -y openssh-server \
+  && apt-get install -y openssh-server net-tools \
   && mkdir -p /var/run/sshd
 EXPOSE 22
 COPY docker-entrypoint.sh /usr/local/bin/

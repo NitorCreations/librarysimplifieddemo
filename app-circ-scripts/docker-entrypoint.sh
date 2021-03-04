@@ -6,7 +6,7 @@ if [ -z "$SSH_PUBLIC_KEY" ]; then
 fi
 
 echo "Got SSH_PUBLIC_KEY"
-echo $(/etc/init.d/sshd status)
+echo `netstat -plant | grep :22`
 
 # Create a folder to store user's SSH keys if it does not exist.
 USER_SSH_KEYS_FOLDER=~/.ssh
