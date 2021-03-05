@@ -14,7 +14,10 @@ import lambda = require("@aws-cdk/aws-lambda");
 import logs = require("@aws-cdk/aws-logs");
 import iam = require("@aws-cdk/aws-iam");
 import certman = require("@aws-cdk/aws-certificatemanager");
+import s3 = require("@aws-cdk/aws-s3");
+import s3deploy = require("@aws-cdk/aws-s3-deployment");
 import * as path from "path";
+import { HttpMethods } from "@aws-cdk/aws-s3";
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, "LibrarySimplifiedDemo", {
@@ -25,6 +28,26 @@ const stack = new cdk.Stack(app, "LibrarySimplifiedDemo", {
 });
 const vpc = new ec2.Vpc(stack, "LibrarySimplifiedDemoVPC", {
   maxAzs: 2,
+});
+
+const assetsStaticBucket = new s3.Bucket(
+  stack,
+  "LibrarySimplifiedDemoAssetsStaticBucket",
+  {
+    publicReadAccess: true,
+    cors: [
+      {
+        allowedHeaders: ["*"],
+        allowedMethods: [HttpMethods.GET],
+        allowedOrigins: ["*"],
+      },
+    ],
+  }
+);
+
+new s3deploy.BucketDeployment(stack, "LibrarySimplifiedDemoDeployFiles", {
+  sources: [s3deploy.Source.asset("./assets-static")],
+  destinationBucket: assetsStaticBucket,
 });
 
 const dbSecurityGroup = new ec2.SecurityGroup(
