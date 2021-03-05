@@ -204,7 +204,7 @@ const webappService = new ecs_patterns.ApplicationLoadBalancedFargateService(
     securityGroups: [
       ec2.SecurityGroup.fromSecurityGroupId(
         stack,
-        "LSCVPCDefaultSecurityGroup",
+        "LSCVPCDefaultSecurityGroupWS",
         vpc.vpcDefaultSecurityGroup
       ),
       dbSecurityGroup,
@@ -248,6 +248,55 @@ webappService.targetGroup.configureHealthCheck({
   path: "/heartbeat",
 });
 webappService.node.addDependency(dbInitProvider);
+
+const patronWebappService = new ecs_patterns.ApplicationLoadBalancedFargateService(
+  stack,
+  "CirculationPatronWebappService",
+  {
+    cluster,
+    certificate: new certman.Certificate(
+      stack,
+      "LibrarySimplifiedDemoServerCert",
+      {
+        domainName: "lsdemo.nitorio.us",
+        validation: {
+          method: certman.ValidationMethod.DNS,
+          props: {
+            hostedZone: hostedZone,
+          },
+        },
+      }
+    ),
+    taskSubnets: {
+      subnets: vpc.privateSubnets,
+    },
+    securityGroups: [
+      ec2.SecurityGroup.fromSecurityGroupId(
+        stack,
+        "LSCVPCDefaultSecurityGroupPWS",
+        vpc.vpcDefaultSecurityGroup
+      ),
+      dbSecurityGroup,
+      sshSecurityGroup,
+    ],
+    openListener: true,
+    desiredCount: 1,
+    protocol: elb.ApplicationProtocol.HTTPS,
+    targetProtocol: elb.ApplicationProtocol.HTTP,
+    domainName: "lsdemo",
+    domainZone: hostedZone,
+    platformVersion: ecs.FargatePlatformVersion.VERSION1_4,
+    memoryLimitMiB: 2048,
+    cpu: 1024,
+    taskImageOptions: {
+      image: ecs.ContainerImage.fromAsset("./app-patron-web"),
+      containerPort: 3000,
+    },
+  }
+);
+patronWebappService.targetGroup.configureHealthCheck({
+  path: "/",
+});
 
 const circulationScriptsTaskDefinition = new ecs.FargateTaskDefinition(
   stack,
