@@ -71,7 +71,7 @@ const db = new rds.DatabaseInstance(stack, "LibrarySimplifiedDemoDB", {
     ec2.InstanceSize.MEDIUM
   ),
   engine: rds.DatabaseInstanceEngine.postgres({
-    version: rds.PostgresEngineVersion.VER_9_5_23,
+    version: rds.PostgresEngineVersion.VER_12,
   }),
   securityGroups: [dbSecurityGroup],
 });
@@ -304,7 +304,7 @@ const bastion = new ec2.BastionHostLinux(stack, "LSDemoBastion", {
 });
 bastion.instance.addUserData(
   "sudo yum update -y",
-  "sudo yum install -y postgresql95"
+  "sudo yum install -y postgresql12"
 );
 
 app.synth();
